@@ -7,6 +7,7 @@ const methodOverride = require("method-override");
 const Campground = require("./models/campground");
 const catchAsync = require('./utils/catch-async');
 const ExpressError = require("./utils/express-error");
+const {campgroundSchema} = require('./utils/schemas');
 
 const app = express();
 
@@ -30,6 +31,18 @@ db.once("open", function ()
     console.log("Database connected");
 });
 
+const validateCampground = (req, res, next) => {
+    const {error} = campgroundSchema.validate(req.body);
+    if(error){
+        const msg = error.details
+            .map(x => x.message)
+            .join(", ");
+        throw new ExpressError(msg, 400);
+    }
+    else {
+        next();
+    }
+};
 
 app.get("/", (req, res) => {
     res.render("home");
@@ -40,7 +53,7 @@ app.route('/campgrounds')
         const campgrounds = await Campground.find({});
         res.render("campgrounds/index", {campgrounds});
     })
-    .post(catchAsync(async (req, res) => {
+    .post(validateCampground, catchAsync(async (req, res) => {
         const campground = new Campground(req.body.campground);
         await campground.save();
         res.redirect("/campgrounds/"+campground._id);    
@@ -55,7 +68,7 @@ app.route("/campgrounds/:id")
         const campground = await Campground.findById(req.params.id);
         res.render("campgrounds/show", {campground});
     }))
-    .put(catchAsync(async (req, res) => {
+    .put(validateCampground, catchAsync(async (req, res) => {
         const {id} = req.params;
         const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground});
         res.redirect("/campgrounds/"+campground._id);    
