@@ -5,9 +5,10 @@ const path = require("path");
 const methodOverride = require("method-override");
 
 const Campground = require("./models/campground");
+const Review = require("./models/review");
 const catchAsync = require('./utils/catch-async');
 const ExpressError = require("./utils/express-error");
-const {campgroundSchema} = require('./utils/schemas');
+const {campgroundSchema} = require('./schemas');
 
 const app = express();
 
@@ -83,6 +84,14 @@ app.get("/campgrounds/:id/edit", catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     res.render("campgrounds/edit", {campground});
 }));
+
+app.post("/campgrounds/:id/reviews", async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await Promise.all([review.save(), campground.save()]);
+    res.redirect(`/campgrounds/${campground._id}`);
+})
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))
