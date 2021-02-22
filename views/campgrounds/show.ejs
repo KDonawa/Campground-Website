@@ -32,9 +32,10 @@
 
         <h2>Leave a Review</h2>
         <form
-            class="mb-3"
+            class="mb-3 needs-validation"
             action="/campgrounds/<%= campground._id %>/reviews"
             method="POST"
+            novalidate
         >
             <div class="mb3">
                 <label class="form-label" for="rating">Rating</label>
@@ -54,8 +55,10 @@
                     name="review[body]"
                     id="body"
                     cols="30"
-                    rows="4"
+                    rows="3"
+                    required
                 ></textarea>
+                <div class="valid-feedback">Looks good!</div>
             </div>
             <button class="btn btn-success">Submit</button>
         </form>
