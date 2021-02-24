@@ -1,7 +1,7 @@
 const joi = require('joi');
 
 module.exports = {
-    campgroundSchema: joi.object({
+    campgroundValidator: joi.object({
         campground: joi
             .object({
                 title: joi.string().required(),
@@ -12,7 +12,7 @@ module.exports = {
             })
             .required(),
     }),
-    reviewSchema: joi.object({
+    reviewValidator: joi.object({
         review: joi
             .object({
                 rating: joi.number().required().min(1).max(5),
