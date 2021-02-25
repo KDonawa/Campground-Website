@@ -4,6 +4,7 @@ const ejsMate = require("ejs-mate");
 const path = require("path");
 const methodOverride = require("method-override");
 const session = require("express-session");
+const flash = require('connect-flash');
 
 const ExpressError = require("./utils/express-error");
 const campgrounds = require('./routes/campgrounds');
@@ -28,6 +29,13 @@ app.use(session({
         maxAge: 1000*60*60*24*7,
     },
 }));
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+})
+
 app.use('/campgrounds', campgrounds);
 app.use('/campgrounds/:id/reviews', reviews);
 
