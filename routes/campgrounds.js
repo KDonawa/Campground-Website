@@ -5,6 +5,7 @@ const Campground = require("../models/campground");
 const catchAsync = require('../utils/catch-async');
 const { campgroundValidator } = require('../schemas');
 const ExpressError = require("../utils/express-error");
+const {isLoggedIn} = require('../middleware');
 
 const validateCampground = (req, res, next) => {
     const {error} = campgroundValidator.validate(req.body);
@@ -24,14 +25,14 @@ router.route('/')
         const campgrounds = await Campground.find({});
         res.render("campgrounds/index", {campgrounds});
     })
-    .post(validateCampground, catchAsync(async (req, res) => {
+    .post(isLoggedIn, validateCampground, catchAsync(async (req, res) => {
         const campground = new Campground(req.body.campground);
         await campground.save();
         req.flash('success', 'Successfully made a new campground!');
         res.redirect("/campgrounds/"+campground._id);    
     }));
 
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {  
     res.render("campgrounds/new");    
 });
 
@@ -46,7 +47,7 @@ router.route("/:id")
         }
         res.render("campgrounds/show", {campground});
     }))
-    .put(validateCampground, catchAsync(async (req, res) => {
+    .put(isLoggedIn, validateCampground, catchAsync(async (req, res) => {
         const {id} = req.params;
         const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground});
         if(!campground){
@@ -56,14 +57,14 @@ router.route("/:id")
         req.flash('success', 'Successfully updated campground!');
         res.redirect("/campgrounds/"+campground._id);    
     }))
-    .delete(catchAsync(async (req, res) => {
+    .delete(isLoggedIn, catchAsync(async (req, res) => {
         const {id} = req.params;
         await Campground.findByIdAndDelete(id);
         req.flash('success', 'Successfully deleted campground');
         res.redirect("/campgrounds");    
     }));
 
-router.get("/:id/edit", catchAsync(async (req, res) => {
+router.get("/:id/edit", isLoggedIn, catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     res.render("campgrounds/edit", {campground});
 }));
