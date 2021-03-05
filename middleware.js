@@ -1,6 +1,6 @@
 const Campground = require("./models/campground");
 const Review = require("./models/review");
-const { campgroundValidator } = require('./schemas');
+const { campgroundValidator, reviewValidator } = require('./schemas');
 const ExpressError = require("./utils/express-error");
 
 module.exports = {
@@ -47,5 +47,15 @@ module.exports = {
         else {
             next();
         }
-    }
+    },
+    validateReview : (req, res, next) => {
+        const {error} = reviewValidator.validate(req.body);
+        if(error){
+            const msg = error.details
+                .map(x => x.message)
+                .join(", ");
+            throw new ExpressError(msg, 400);
+        }
+        else next();
+    },
 };
