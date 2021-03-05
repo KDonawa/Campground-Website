@@ -1,5 +1,7 @@
 const Campground = require("./models/campground");
 const Review = require("./models/review");
+const { campgroundValidator } = require('./schemas');
+const ExpressError = require("./utils/express-error");
 
 module.exports = {
     isLoggedIn: (req, res, next) => {
@@ -33,5 +35,17 @@ module.exports = {
         }
         req.flash('error', 'You do not have permission to do that!');
         return res.redirect('/campgrounds/'+id);
+    },
+    validateCampground : (req, res, next) => {
+        const {error} = campgroundValidator.validate(req.body);
+        if(error){
+            const msg = error.details
+                .map(x => x.message)
+                .join(", ");
+            throw new ExpressError(msg, 400);
+        }
+        else {
+            next();
+        }
     }
 };
