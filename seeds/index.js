@@ -27,9 +27,12 @@ async function seedDB(){
             author: '603ad1615d8cb1414c7d2e33',
             location:`${hub.city}, ${hub.state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
-            image: 'https://source.unsplash.com/collection/483251',
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, modi aperiam? Pariatur id accusantium maxime! Rem ullam consectetur laboriosam minima iure amet cupiditate, doloribus repellendus, aliquid omnis quasi possimus officia.',
-            price
+            price,
+            images: [{
+                url: 'https://res.cloudinary.com/kerron/image/upload/v1615476655/YelpCamp/ij9tunvimsxa8gdrdk5h.jpg',
+                filename: 'YelpCamp/ij9tunvimsxa8gdrdk5h'
+              }]
         });
         await camp.save();
     };
