@@ -10,6 +10,7 @@ module.exports = {
                 description: joi.string().required(),
             })
             .required(),
+        deleteImages: joi.array(),
     }),
     reviewValidator: joi.object({
         review: joi
