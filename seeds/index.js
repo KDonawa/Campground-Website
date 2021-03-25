@@ -29,8 +29,12 @@ async function seedDB(){
             title: `${sample(descriptors)} ${sample(places)}`,
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, modi aperiam? Pariatur id accusantium maxime! Rem ullam consectetur laboriosam minima iure amet cupiditate, doloribus repellendus, aliquid omnis quasi possimus officia.',
             price,
+            geometry: {
+                type: "Point",
+                coordinates: [-113.1331, 47.0202]
+            },
             images: [{
-                url: 'https://res.cloudinary.com/kerron/image/upload/v1615476655/YelpCamp/ij9tunvimsxa8gdrdk5h.jpg',
+                url: 'https://res.cloudinary.com/kerron/image/upload/v1615472607/YelpCamp/slgmfidaiu5ivikoqz2p.jpg',
                 filename: 'YelpCamp/ij9tunvimsxa8gdrdk5h'
               }]
         });
