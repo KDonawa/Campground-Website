@@ -31,7 +31,7 @@ async function seedDB(){
             price,
             geometry: {
                 type: "Point",
-                coordinates: [-113.1331, 47.0202]
+                coordinates: [hub.longitude, hub.latitude]
             },
             images: [{
                 url: 'https://res.cloudinary.com/kerron/image/upload/v1615472607/YelpCamp/slgmfidaiu5ivikoqz2p.jpg',
